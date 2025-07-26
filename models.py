@@ -1,5 +1,12 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
+import re
+import openai
+import together
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Add OpenAI and Together API keys
+openai.api_key = "your-openai-api-key"
+together.api_key = "your-together-api-key"
 
 MODEL_MAP = {
     # Hugging Face models
