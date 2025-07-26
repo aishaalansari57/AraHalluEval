@@ -5,9 +5,10 @@ import argparse
 from models import load_model_and_tokenizer, MODEL_MAP
 from inference import get_response
 
+# Task-specific files and prompts
 datasets = {
     "summarization": "summarization_test.csv",
-    "qa":"qa_test.csv"
+    "qa": "qa_test.csv"
 }
 cols = {
     "summarization": "text",
@@ -21,27 +22,39 @@ prompts = {
 def main(model_key, task):
     assert model_key in MODEL_MAP, f"{model_key} not found in MODEL_MAP."
 
+    # Load model/tokenizer/device
     model, tokenizer, device = load_model_and_tokenizer(model_key)
 
+    # Load data
     dataset_name = datasets[task]
     col_name = cols[task]
-
     df = pd.read_csv(dataset_name)
     prompt_ar = prompts[task]
-    output_dir = Path(f"{task}_{model_key}")
+
+    # Setup output directory
+    output_dir = Path(f"{task}_{model_key.replace(':', '_')}")
     output_dir.mkdir(exist_ok=True)
 
+    responses = []
     for idx, row in tqdm(df.iterrows(), total=len(df), desc=model_key):
         text_input = row[col_name]
         prompt = prompt_ar.format(text=text_input)
-        response = get_response(prompt, model, tokenizer, device)
-        with open(output_dir / f"{idx+1}.txt", "w", encoding="utf-8") as f:
-            f.write(response)
+        try:
+            response = get_response(prompt, model, tokenizer, device, model_key=model_key, task=task)
+        except Exception as e:
+            response = f"ERROR: {e}"
+        responses.append(response)
+
+    # Save all results in a single CSV
+    df["response"] = responses
+    df.to_csv(output_dir / "results.csv", index=False, encoding="utf-8-sig")
+
+    print(f"\n✅ Done! Saved output to: {output_dir / 'results.csv'}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run summarization with a specified model.")
-    parser.add_argument("--model", type=str, required=True, help="Model name from MODEL_MAP (e.g., Jais-6.7b)")
-    parser.add_argument("--task", type=str, default="summarization")
+    parser = argparse.ArgumentParser(description="Run Arabic summarization or QA with any supported model.")
+    parser.add_argument("--model", type=str, required=True, help="Model key from MODEL_MAP (e.g., openai:gpt-4o)")
+    parser.add_argument("--task", type=str, choices=["summarization", "qa"], default="summarization")
     args = parser.parse_args()
 
     main(args.model, args.task)
