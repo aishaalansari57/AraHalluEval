@@ -7,12 +7,10 @@ from inference import get_response
 
 datasets = {
     "summarization": "summarization_test.csv",
-    "translation": "translation_test.csv",
     "qa":"qa_test.csv"
 }
 cols = {
     "summarization": "text",
-    "translation": "sourceString",
     "qa": "question_test"
 }
 prompts = {
