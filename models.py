@@ -7,10 +7,10 @@ from huggingface_hub import login
 import os
 
 # Hugging Face login (use token with access to gated models)
-login(token="")
+#login(token="")
 # Add OpenAI and Together API keys
-openai.api_key = "your-openai-api-key"
-together.api_key = "your-together-api-key"
+#openai.api_key = "your-openai-api-key"
+#together.api_key = ""
 
 MODEL_MAP = {
     # Hugging Face models
@@ -30,10 +30,9 @@ MODEL_MAP = {
 
     # Together AI models
     "together:deepseek-v3": "deepseek-ai/DeepSeek-V3",
-    "together:deepseek-r1": "deepseek-ai/DeepSeek-R1",
-    "together:qwen-qwq": "qwen/Qwen-QwQ-32B",
-    "together:llama4-scout": "meta-llama/Llama-4-Scout-17B-16E-Instruct-FP8",
-    "together:llama4-maverick": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "together:deepseek-r1": "deepseek-ai/DeepSeek-R1-0528",
+    "together:qwen-qwq": "Qwen/QwQ-32B",
+    "together:llama4-Maverick": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
 }
 
 
