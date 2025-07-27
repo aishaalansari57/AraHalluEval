@@ -9,8 +9,8 @@ import os
 # Hugging Face login (use token with access to gated models)
 #login(token="")
 # Add OpenAI and Together API keys
-#openai.api_key = "your-openai-api-key"
-#together.api_key = ""
+#openai.api_key = ""
+#together.api_key  = ""
 
 MODEL_MAP = {
     # Hugging Face models
@@ -24,9 +24,9 @@ MODEL_MAP = {
     "bloom-7b": "bigscience/bloom-7b",
 
     # OpenAI models
-    "openai:gpt-3.5": "openai",
-    "openai:gpt-4": "openai",
     "openai:gpt-4o": "openai",
+    "openai:gpt-o3": "openai",
+
 
     # Together AI models
     "together:deepseek-v3": "deepseek-ai/DeepSeek-V3",
