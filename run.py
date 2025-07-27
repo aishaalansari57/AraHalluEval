@@ -8,11 +8,11 @@ from inference import get_response
 # Task-specific files and prompts
 datasets = {
     "summarization": "summ_annotations.csv",
-    "qa": "qa_merged_predictions.csv"
+    "qa": "QA_merged_predictions.csv"
 }
 cols = {
     "summarization": "text",
-    "qa": "question_test"
+    "qa": "question_text"
 }
 prompts = {
     "summarization": "لخص النص الآتي في جملة واحدة فقط، وأجب باللغة العربية:\n\n{text}\n\nالملخص:",
@@ -28,6 +28,7 @@ def main(model_key, task):
     # Load data
     dataset_name = datasets[task]
     col_name = cols[task]
+    #df = pd.read_csv(dataset_name).head(5)  # ✅ Limit to 5 rows
     df = pd.read_csv(dataset_name)
     prompt_ar = prompts[task]
 
@@ -36,6 +37,7 @@ def main(model_key, task):
     output_dir.mkdir(exist_ok=True)
 
     responses = []
+    #for idx, row in tqdm(df.head(5).iterrows(), total=5, desc=f"{model_key} (first 5)"):
     for idx, row in tqdm(df.iterrows(), total=len(df), desc=model_key):
         text_input = row[col_name]
         prompt = prompt_ar.format(text=text_input)
