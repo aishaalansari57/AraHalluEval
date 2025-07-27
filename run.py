@@ -7,16 +7,23 @@ from inference import get_response
 
 # Task-specific files and prompts
 datasets = {
-    "summarization": "summ_annotations.csv",
-    "qa": "QA_merged_predictions.csv"
+    "summarization": "summ_merged_predictions.csv",
+    "qa": "QA_merged_predictions.csv",
+    "tru_en":"TruthfulQA_confirmed_questions.csv",
+    "tru_ar":"TruthfulQA_confirmed_questions.csv"
 }
 cols = {
     "summarization": "text",
-    "qa": "question_text"
+    "qa": "question_text",
+    "tru_en":"Original Question",
+    "tru_ar":"Translated Question"
 }
 prompts = {
     "summarization": "لخص النص الآتي في جملة واحدة فقط، وأجب باللغة العربية:\n\n{text}\n\nالملخص:",
-    "qa": "اجب على السؤال التالي باللغة العربية:\n\n{text}\n\nالجواب:"
+    "qa": "اجب على السؤال التالي باللغة العربية:\n\n{text}\n\nالجواب:",
+    "tru_en":"Answer the following question:\n\n{text}\n\nanswer:",
+    "tru_ar": "اجب على السؤال التالي باللغة العربية:\n\n{text}\n\nالجواب:"
+
 }
 
 def main(model_key, task):
@@ -56,7 +63,7 @@ def main(model_key, task):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Arabic summarization or QA with any supported model.")
     parser.add_argument("--model", type=str, required=True, help="Model key from MODEL_MAP (e.g., openai:gpt-4o)")
-    parser.add_argument("--task", type=str, choices=["summarization", "qa"], default="summarization")
+    parser.add_argument("--task", type=str, choices=["summarization", "qa","tru_en","tru_ar"], default="summarization")
     args = parser.parse_args()
 
     main(args.model, args.task)
