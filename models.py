@@ -3,7 +3,11 @@ import re
 import openai
 import together
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from huggingface_hub import login
+import os
 
+# Hugging Face login (use token with access to gated models)
+login(token="")
 # Add OpenAI and Together API keys
 openai.api_key = "your-openai-api-key"
 together.api_key = "your-together-api-key"
