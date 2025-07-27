@@ -7,8 +7,8 @@ from inference import get_response
 
 # Task-specific files and prompts
 datasets = {
-    "summarization": "summarization_test.csv",
-    "qa": "qa_test.csv"
+    "summarization": "summ_merged_predictions.csv",
+    "qa": "qa_merged_predictions.csv"
 }
 cols = {
     "summarization": "text",
