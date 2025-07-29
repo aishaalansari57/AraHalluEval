@@ -36,17 +36,26 @@ def get_response(prompt, model, tokenizer, device, model_key, task="summarizatio
 
         # Hugging Face models
         else:
-            input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
-            input_len = input_ids.shape[-1]
+            # Tokenize and move to device
+            inputs = tokenizer(
+                prompt,
+                return_tensors="pt",
+                padding=True,
+                truncation=True
+            )
+            inputs = {k: v.to(device) for k, v in inputs.items()}  # ✅ Move to device correctly
 
+            # Generate
             output_ids = model.generate(
-                input_ids,
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
                 temperature=0.0,
                 top_p=1.0,
                 do_sample=False,
                 max_new_tokens=200,
-                min_length=input_len + 4,
-                repetition_penalty=1.2
+                min_length=inputs["input_ids"].shape[-1] + 4,
+                repetition_penalty=1.2,
+                pad_token_id=tokenizer.eos_token_id
             )
 
             decoded = tokenizer.batch_decode(
